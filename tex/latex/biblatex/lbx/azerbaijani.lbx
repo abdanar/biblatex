@@ -1,0 +1,620 @@
+\ProvidesFile{azerbaijani.lbx}
+[\abx@lbxid]
+
+\DeclareRedundantLanguages{azerbaijani}{azerbaijani}
+
+\DeclareBibliographyExtras{%
+  \renewrobustcmd*{\bibdatesep}{\adddot}%
+  \protected\def\bibrangedash{%
+    \textendash\penalty\hyphenpenalty}% breakable dash
+  \let\finalandcomma=\empty
+  \def\finalandsemicolon{\addsemicolon}%
+  \protected\def\mkbibordinal#1{%
+    \blx@imc@ifinteger{#1}
+      {\begingroup
+       \@tempcnta0#1\relax
+       \edef\lbx@az@ordinalnum{\number\@tempcnta}%
+       \number\@tempcnta-%
+       \ifnum\@tempcnta=0
+         cı%
+       \else
+         \@tempcntb\@tempcnta
+         \divide\@tempcntb10
+         \multiply\@tempcntb10
+         \advance\@tempcnta-\@tempcntb
+         \ifnum\@tempcnta>0
+           \ifcase\@tempcnta
+           \or ci\or ci\or cü\or cü\or ci\or cı\or ci\or ci\or cu\fi
+         \else
+           \@tempcnta\lbx@az@ordinalnum\relax
+           \divide\@tempcnta10
+           \@tempcntb\@tempcnta
+           \divide\@tempcntb10
+           \multiply\@tempcntb10
+           \advance\@tempcnta-\@tempcntb
+           \ifnum\@tempcnta>0
+             \ifcase\@tempcnta
+             \or cu\or ci\or cu\or cı\or ci\or cı\or ci\or ci\or cı\fi
+           \else
+             \@tempcnta\lbx@az@ordinalnum\relax
+             \@tempcntb\@tempcnta
+             \divide\@tempcntb1000
+             \multiply\@tempcntb1000
+             \advance\@tempcnta-\@tempcntb
+             \ifnum\@tempcnta>0
+               cü%
+             \else
+               \@tempcnta\lbx@az@ordinalnum\relax
+               \@tempcntb\@tempcnta
+               \divide\@tempcntb1000000
+               \multiply\@tempcntb1000000
+               \advance\@tempcnta-\@tempcntb
+               \ifnum\@tempcnta>0
+                 ci%
+               \else
+                 \@tempcnta\lbx@az@ordinalnum\relax
+                 \@tempcntb\@tempcnta
+                 \divide\@tempcntb1000000000
+                 \multiply\@tempcntb1000000000
+                 \advance\@tempcnta-\@tempcntb
+                 \ifnum\@tempcnta>0 cu\else cı\fi
+               \fi
+             \fi
+           \fi
+         \fi
+       \fi
+       \endgroup}
+      {#1}}%
+  \protected\def\mkbibmascord{\mkbibordinal}%
+  \protected\def\mkbibfemord{\mkbibordinal}%
+  \protected\def\mkbibneutord{\mkbibordinal}%
+  \protected\def\mkbibdatelong#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\stripzeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{\nobreakspace}}%
+    \iffieldundef{#2}
+      {}
+      {\mkbibmonth{\thefield{#2}}%
+       \iffieldundef{#1}{}{\space}}%
+    \iffieldbibstring{#1}
+      {\bibstring{\thefield{#1}}}
+      {\dateeraprintpre{#1}\stripzeros{\thefield{#1}}}}%
+  \protected\def\mkbibdateshort#1#2#3{%
+    \iffieldundef{#3}
+      {}
+      {\mkdayzeros{\thefield{#3}}%
+       \iffieldundef{#2}{}{\bibdatesep}}%
+    \iffieldundef{#2}
+      {}
+      {\mkmonthzeros{\thefield{#2}}%
+       \iffieldundef{#1}{}{\bibdatesep}}%
+    \iffieldbibstring{#1}
+      {\bibstring{\thefield{#1}}}
+      {\dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}}%
+  \expandafter\protected\expandafter\def\csname mkbibtime24h\endcsname#1#2#3#4{%
+      \iffieldundef{#1}
+        {}
+        {\mktimezeros{\thefield{#1}}%
+         \iffieldundef{#2}{}{\bibtimesep}}%
+      \iffieldundef{#2}
+        {}
+        {\mktimezeros{\thefield{#2}}%
+         \iffieldundef{#3}{}{\bibtimesep}}%
+      \iffieldundef{#3}
+        {}
+        {\mktimezeros{\thefield{#3}}}%
+      \iffieldundef{#4}{}
+        {\bibtimezonesep
+         \mkbibtimezone{\thefield{#4}}}}%
+  \expandafter\protected\expandafter\def\csname mkbibtime12h\endcsname#1#2#3#4{%
+      \stripzeros{\mktimehh{\thefield{#1}}}%
+      \bibtimesep
+      \forcezerosmdt{\thefield{#2}}%
+      \iffieldundef{#3}{}
+        {\bibtimesep
+         \forcezerosmdt{\thefield{#3}}}%
+       \space
+       \ifnumless{\thefield{#1}}{12}
+         {\bibstring{am}}
+         {\bibstring{pm}}%
+      \iffieldundef{#4}{}
+       {\space\bibtimezonesep
+        \parentext{\mkbibtimezone{\thefield{#4}}}}}%
+  \protected\def\mkbibyeardivisiondateshort#1#2{%
+    \mkbibyeardivision{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+  \protected\def\mkbibyeardivisiondatelong#1#2{%
+    \mkbibyeardivision{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+}
+
+\DeclareBibliographyStrings{%
+  bibliography     = {{Ədəbiyyat}{Ədəbiyyat}},
+  references       = {{İstinadlar}{İstinadlar}},
+  shorthands       = {{Abreviaturaların siyahısı}{Abreviaturalar}},
+  editor           = {{redaktor}{red\adddot}},
+  editors          = {{redaktorlar}{red\adddot}},
+  compiler         = {{tərtibçi}{tərt\adddot}},
+  compilers        = {{tərtibçilər}{tərt\adddot}},
+  redactor         = {{redaktor}{red\adddot}},
+  redactors        = {{redaktorlar}{red\adddot}},
+  reviser          = {{təkmilləşdirən}{təkmilləşdirən}},
+  revisers         = {{təkmilləşdirənlər}{təkmilləşdirənlər}},
+  founder          = {{təsisçi}{təsisçi}},
+  founders         = {{təsisçilər}{təsisçilər}},
+  continuator      = {{davamçı}{davamçı}},
+  continuators     = {{davamçılar}{davamçılar}},
+  collaborator     = {{əməkdaş}{əməkdaş}},
+  collaborators    = {{əməkdaşlar}{əməkdaşlar}},
+  translator       = {{tərcüməçi}{tərc\adddot}},
+  translators      = {{tərcüməçilər}{tərc\adddot}},
+  commentator      = {{şərhçi}{şərh}},
+  commentators     = {{şərhçilər}{şərh}},
+  annotator        = {{qeydlərin müəllifi}{qeydlərin müəllifi}},
+  annotators       = {{qeydlərin müəllifləri}{qeydlərin müəllifləri}},
+  commentary       = {{şərh}{şərh}},
+  annotations      = {{qeydlər}{qeydlər}},
+  introduction     = {{giriş}{giriş}},
+  foreword         = {{ön söz}{ön söz}},
+  afterword        = {{son söz}{son söz}},
+  editortr         = {{redaktor və tərcüməçi}%
+                      {red\adddotspace və tərc\adddot}},
+  editorstr        = {{redaktorlar və tərcüməçilər}%
+                      {red\adddotspace və tərc\adddot}},
+  editorco         = {{redaktor və şərhçi}%
+                      {red\adddotspace və şərh}},
+  editorsco        = {{redaktorlar və şərhçilər}%
+                      {red\adddotspace və şərh}},
+  editoran         = {{redaktor və qeydlərin müəllifi}%
+                      {red\adddotspace və qeydlərin müəllifi}},
+  editorsan        = {{redaktorlar və qeydlərin müəllifləri}%
+                      {red\adddotspace və qeydlərin müəllifləri}},
+  editorin         = {{redaktor və giriş}%
+                      {red\adddotspace və giriş}},
+  editorsin        = {{redaktorlar və giriş}%
+                      {red\adddotspace və giriş}},
+  editorfo         = {{redaktor və ön söz}%
+                      {red\adddotspace və ön söz}},
+  editorsfo        = {{redaktorlar və ön söz}%
+                      {red\adddotspace və ön söz}},
+  editoraf         = {{redaktor və son söz}%
+                      {red\adddotspace və son söz}},
+  editorsaf        = {{redaktorlar və son söz}%
+                      {red\adddotspace və son söz}},
+  editortrco       = {{redaktor, tərcüməçi\finalandcomma\ və şərhçi}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və şərh}},
+  editorstrco      = {{redaktorlar, tərcüməçilər\finalandcomma\ və şərhçilər}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və şərh}},
+  editortran       = {{redaktor, tərcüməçi\finalandcomma\ və qeydlərin müəllifi}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və qeydlərin müəllifi}},
+  editorstran      = {{redaktorlar, tərcüməçilər\finalandcomma\ və qeydlərin müəllifləri}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və qeydlərin müəllifləri}},
+  editortrin       = {{redaktor, tərcüməçi\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və giriş}},
+  editorstrin      = {{redaktorlar, tərcüməçilər\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və giriş}},
+  editortrfo       = {{redaktor, tərcüməçi\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və ön söz}},
+  editorstrfo      = {{redaktorlar, tərcüməçilər\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və ön söz}},
+  editortraf       = {{redaktor, tərcüməçi\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və son söz}},
+  editorstraf      = {{redaktorlar, tərcüməçilər\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc\adddot\finalandcomma\ və son söz}},
+  editorcoin       = {{redaktor, şərhçi\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və giriş}},
+  editorscoin      = {{redaktorlar, şərhçilər\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və giriş}},
+  editorcofo       = {{redaktor, şərhçi\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və ön söz}},
+  editorscofo      = {{redaktorlar, şərhçilər\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və ön söz}},
+  editorcoaf       = {{redaktor, şərhçi\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və son söz}},
+  editorscoaf      = {{redaktorlar, şərhçilər\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace şərh\finalandcomma\ və son söz}},
+  editoranin       = {{redaktor, qeydlərin müəllifi\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace qeydlərin müəllifi\finalandcomma\ və giriş}},
+  editorsanin      = {{redaktorlar, qeydlərin müəllifləri\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace qeydlərin müəllifləri\finalandcomma\ və giriş}},
+  editoranfo       = {{redaktor, qeydlərin müəllifi\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace qeydlərin müəllifi\finalandcomma\ və ön söz}},
+  editorsanfo      = {{redaktorlar, qeydlərin müəllifləri\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace qeydlərin müəllifləri\finalandcomma\ və ön söz}},
+  editoranaf       = {{redaktor, qeydlərin müəllifi\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace qeydlərin müəllifi\finalandcomma\ və son söz}},
+  editorsanaf      = {{redaktorlar, qeydlərin müəllifləri\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace qeydlərin müəllifləri\finalandcomma\ və son söz}},
+  editortrcoin     = {{redaktor, tərcüməçi, şərhçi\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və giriş}},
+  editorstrcoin    = {{redaktorlar, tərcüməçilər, şərhçilər\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və giriş}},
+  editortrcofo     = {{redaktor, tərcüməçi, şərhçi\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və ön söz}},
+  editorstrcofo    = {{redaktorlar, tərcüməçilər, şərhçilər\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və ön söz}},
+  editortrcoaf     = {{redaktor, tərcüməçi, şərhçi\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və son söz}},
+  editorstrcoaf    = {{redaktorlar, tərcüməçilər, şərhçilər\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc., şərh\finalandcomma\ və son söz}},
+  editortranin     = {{redaktor, tərcüməçi, qeydlərin müəllifi\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifi\finalandcomma\ və giriş}},
+  editorstranin    = {{redaktorlar, tərcüməçilər, qeydlərin müəllifləri\finalandcomma\ və giriş}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifləri\finalandcomma\ və giriş}},
+  editortranfo     = {{redaktor, tərcüməçi, qeydlərin müəllifi\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifi\finalandcomma\ və ön söz}},
+  editorstranfo    = {{redaktorlar, tərcüməçilər, qeydlərin müəllifləri\finalandcomma\ və ön söz}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifləri\finalandcomma\ və ön söz}},
+  editortranaf     = {{redaktor, tərcüməçi, qeydlərin müəllifi\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifi\finalandcomma\ və son söz}},
+  editorstranaf    = {{redaktorlar, tərcüməçilər, qeydlərin müəllifləri\finalandcomma\ və son söz}%
+                      {red.,\addabbrvspace tərc., qeydlərin müəllifləri\finalandcomma\ və son söz}},
+  translatorco     = {{tərcüməçi və şərhçi}%
+                      {tərc\adddot\ və şərh}},
+  translatorsco    = {{tərcüməçilər və şərhçilər}%
+                      {tərc\adddot\ və şərh}},
+  translatoran     = {{tərcüməçi və qeydlərin müəllifi}%
+                      {tərc\adddot\ və qeydlərin müəllifi}},
+  translatorsan    = {{tərcüməçilər və qeydlərin müəllifləri}%
+                      {tərc\adddot\ və qeydlərin müəllifləri}},
+  translatorin     = {{tərcümə və giriş}%
+                      {tərc\adddot\ və giriş}},
+  translatorsin    = {{tərcümə və giriş}%
+                      {tərc\adddot\ və giriş}},
+  translatorfo     = {{tərcümə və ön söz}%
+                      {tərc\adddot\ və ön söz}},
+  translatorsfo    = {{tərcümə və ön söz}%
+                      {tərc\adddot\ və ön söz}},
+  translatoraf     = {{tərcümə və son söz}%
+                      {tərc\adddot\ və son söz}},
+  translatorsaf    = {{tərcümə və son söz}%
+                      {tərc\adddot\ və son söz}},
+  translatorcoin   = {{tərcümə, şərh və giriş}%
+                      {tərc., şərh\ və giriş}},
+  translatorscoin  = {{tərcümə, şərh və giriş}%
+                      {tərc., şərh\ və giriş}},
+  translatorcofo   = {{tərcümə, şərh və ön söz}%
+                      {tərc., şərh\ və ön söz}},
+  translatorscofo  = {{tərcümə, şərh və ön söz}%
+                      {tərc., şərh\ və ön söz}},
+  translatorcoaf   = {{tərcümə, şərh və son söz}%
+                      {tərc., şərh\ və son söz}},
+  translatorscoaf  = {{tərcümə, şərh və son söz}%
+                      {tərc., şərh\ və son söz}},
+  translatoranin   = {{tərcümə, qeydlər və giriş}%
+                      {tərc., qeydlər və giriş}},
+  translatorsanin  = {{tərcümə, qeydlər və giriş}%
+                      {tərc., qeydlər və giriş}},
+  translatoranfo   = {{tərcümə, qeydlər və ön söz}%
+                      {tərc., qeydlər və ön söz}},
+  translatorsanfo  = {{tərcümə, qeydlər və ön söz}%
+                      {tərc., qeydlər və ön söz}},
+  translatoranaf   = {{tərcümə, qeydlər və son söz}%
+                      {tərc., qeydlər və son söz}},
+  translatorsanaf  = {{tərcümə, qeydlər və son söz}%
+                      {tərc., qeydlər və son söz}},
+  organizer        = {{təşkilatçı}{təşk\adddot}},
+  organizers       = {{təşkilatçılar}{təşk\adddot}},
+  byorganizer      = {{təşkil edən}{təşk\adddotspace edən}},
+  byauthor         = {{müəllif}{müəllif}},
+  byeditor         = {{redaktə edən}{red\adddotspace edən}},
+  bycompiler       = {{tərtib edən}{tərt\adddotspace edən}},
+  byredactor       = {{redaktə edən}{red\adddotspace edən}},
+  byreviser        = {{təkmilləşdirən}{təkmilləşdirən}},
+  byreviewer       = {{rəy verən}{rəy verən}},
+  byfounder        = {{təsis edən}{təsis edən}},
+  bycontinuator    = {{davam etdirən}{davam etdirən}},
+  bycollaborator   = {{əməkdaşlıq edən}{əməkdaşlıq edən}},
+  bytranslator     = {{\lbx@lfromlang\ tərcümə edən}{\lbx@sfromlang\ tərc\adddot\ edən}},
+  bycommentator    = {{şərh edən}{şərh edən}},
+  byannotator      = {{qeydlərin müəllifi}{qeydlərin müəllifi}},
+  withcommentator  = {{şərhini yazan}{şərhini yazan}},
+  withannotator    = {{qeydlərini yazan}{qeydlərini yazan}},
+  withintroduction = {{girişi yazan}{girişi yazan}},
+  withforeword     = {{ön sözü yazan}{ön sözü yazan}},
+  withafterword    = {{son sözü yazan}{son sözü yazan}},
+  byeditortr       = {{redaktə və \lbx@lfromlang\ tərcümə edən}%
+                      {red\adddotspace və \lbx@sfromlang\ tərc\adddot\ edən}},
+  byeditorco       = {{redaktə və şərh edən}%
+                      {red\adddotspace və şərh edən}},
+  byeditoran       = {{redaktə edən və qeydləri yazan}%
+                      {red\adddotspace edən və qeydləri yazan}},
+  byeditorin       = {{girişlə birlikdə redaktə edən}%
+                      {girişlə birlikdə red\adddotspace edən}},
+  byeditorfo       = {{ön sözlə birlikdə redaktə edən}%
+                      {ön sözlə birlikdə red\adddotspace edən}},
+  byeditoraf       = {{son sözlə birlikdə redaktə edən}%
+                      {son sözlə birlikdə red\adddotspace edən}},
+  byeditortrco     = {{redaktə, \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  byeditortran     = {{redaktə, \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  byeditortrin     = {{girişlə birlikdə redaktə və \lbx@lfromlang\ tərcümə edən}%
+                      {girişlə birlikdə red\adddotspace və \lbx@sfromlang\ tərc\adddot\ edən}},
+  byeditortrfo     = {{ön sözlə birlikdə redaktə və \lbx@lfromlang\ tərcümə edən}%
+                      {ön sözlə birlikdə red\adddotspace və \lbx@sfromlang\ tərc\adddot\ edən}},
+  byeditortraf     = {{son sözlə birlikdə redaktə və \lbx@lfromlang\ tərcümə edən}%
+                      {son sözlə birlikdə red\adddotspace və \lbx@sfromlang\ tərc\adddot\ edən}},
+  byeditorcoin     = {{girişlə birlikdə redaktə və şərh edən}%
+                      {girişlə birlikdə red\adddotspace və şərh edən}},
+  byeditorcofo     = {{ön sözlə birlikdə redaktə və şərh edən}%
+                      {ön sözlə birlikdə red\adddotspace və şərh edən}},
+  byeditorcoaf     = {{son sözlə birlikdə redaktə və şərh edən}%
+                      {son sözlə birlikdə red\adddotspace və şərh edən}},
+  byeditoranin     = {{girişlə birlikdə redaktə edən və qeydləri yazan}%
+                      {girişlə birlikdə red\adddotspace edən və qeydləri yazan}},
+  byeditoranfo     = {{ön sözlə birlikdə redaktə edən və qeydləri yazan}%
+                      {ön sözlə birlikdə red\adddotspace edən və qeydləri yazan}},
+  byeditoranaf     = {{son sözlə birlikdə redaktə edən və qeydləri yazan}%
+                      {son sözlə birlikdə red\adddotspace edən və qeydləri yazan}},
+  byeditortrcoin   = {{girişlə birlikdə redaktə, \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {girişlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  byeditortrcofo   = {{ön sözlə birlikdə redaktə, \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {ön sözlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  byeditortrcoaf   = {{son sözlə birlikdə redaktə, \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {son sözlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  byeditortranin   = {{girişlə birlikdə redaktə, \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {girişlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  byeditortranfo   = {{ön sözlə birlikdə redaktə, \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {ön sözlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  byeditortranaf   = {{son sözlə birlikdə redaktə, \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {son sözlə birlikdə red.,\addabbrvspace \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  bytranslatorco   = {{\lbx@lfromlang\ tərcümə və şərh edən}%
+                      {\lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  bytranslatoran   = {{\lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {\lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  bytranslatorin   = {{girişlə birlikdə \lbx@lfromlang\ tərcümə edən}%
+                      {girişlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən}},
+  bytranslatorfo   = {{ön sözlə birlikdə \lbx@lfromlang\ tərcümə edən}%
+                      {ön sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən}},
+  bytranslatoraf   = {{son sözlə birlikdə \lbx@lfromlang\ tərcümə edən}%
+                      {son sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən}},
+  bytranslatorcoin = {{girişlə birlikdə \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {girişlə birlikdə \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  bytranslatorcofo = {{ön sözlə birlikdə \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {ön sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  bytranslatorcoaf = {{son sözlə birlikdə \lbx@lfromlang\ tərcümə və şərh edən}%
+                      {son sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ və şərh edən}},
+  bytranslatoranin = {{girişlə birlikdə \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {girişlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  bytranslatoranfo = {{ön sözlə birlikdə \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {ön sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  bytranslatoranaf = {{son sözlə birlikdə \lbx@lfromlang\ tərcümə edən və qeydləri yazan}%
+                      {son sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən və qeydləri yazan}},
+  and              = {{və}{və}},
+  andothers        = {{et\addabbrvspace al\adddot}{et\addabbrvspace al\adddot}},
+  andmore          = {{et\addabbrvspace al\adddot}{et\addabbrvspace al\adddot}},
+  volume           = {{cild}{c\adddot}},
+  volumes          = {{cild}{c\adddot}},
+  involumes        = {{in}{in}},
+  jourvol          = {{cild}{c\adddot}},
+  jourser          = {{seriya}{ser\adddot}},
+  book             = {{kitab}{kitab}},
+  part             = {{hissə}{hissə}},
+  issue            = {{buraxılış}{buraxılış}},
+  newseries        = {{yeni seriya}{yeni ser\adddot}},
+  oldseries        = {{köhnə seriya}{köhnə ser\adddot}},
+  edition          = {{nəşr}{nəşr}},
+  reprint          = {{təkrar nəşr}{təkrar nəşr}},
+  reprintof        = {{reprint of}{repr\adddotspace of}},
+  reprintas        = {{reprinted as}{rpt\adddotspace as}},
+  reprintfrom      = {{reprinted from}{repr\adddotspace from}},
+  reviewof         = {{review of}{rev\adddotspace of}},
+  translationof    = {{translation of}{trans\adddotspace of}},
+  translationas    = {{translated as}{trans\adddotspace as}},
+  translationfrom  = {{translated from}{trans\adddotspace from}},
+  origpubas        = {{originally published as}{orig\adddotspace pub\adddotspace as}},
+  origpubin        = {{originally published in}{orig\adddotspace pub\adddotspace in}},
+  astitle          = {{as}{as}},
+  bypublisher      = {{nəşr edən}{nəşr edən}},
+  nodate           = {{tarix yoxdur}{t\adddot y\adddot}},
+  page             = {{səhifə}{s\adddot}},
+  pages            = {{səhifələr}{s\adddot}},
+  column           = {{sütun}{süt\adddot}},
+  columns          = {{sütunlar}{süt\adddot}},
+  line             = {{sətir}{sət\adddot}},
+  lines            = {{sətirlər}{sət\adddot}},
+  verse            = {{bənd}{b\adddot}},
+  verses           = {{bəndlər}{b\adddot}},
+  section          = {{bölmə}{\S}},
+  sections         = {{bölmələr}{\S\S}},
+  paragraph        = {{paraqraf}{par\adddot}},
+  paragraphs       = {{paraqraflar}{par\adddot}},
+  pagetotal        = {{ümumi səhifə sayı}{s\adddot}},
+  pagetotals       = {{ümumi səhifə sayı}{s\adddot}},
+  columntotal      = {{ümumi sütun sayı}{süt\adddot}},
+  columntotals     = {{ümumi sütun sayı}{süt\adddot}},
+  linetotal        = {{ümumi sətir sayı}{sət\adddot}},
+  linetotals       = {{ümumi sətir sayı}{sət\adddot}},
+  versetotal       = {{ümumi bənd sayı}{b\adddot}},
+  versetotals      = {{ümumi bənd sayı}{b\adddot}},
+  sectiontotal     = {{ümumi bölmə sayı}{\S}},
+  sectiontotals    = {{ümumi bölmə sayı}{\S\S}},
+  paragraphtotal   = {{ümumi paraqraf sayı}{par\adddot}},
+  paragraphtotals  = {{ümumi paraqraf sayı}{par\adddot}},
+  in               = {{in}{in}},
+  inseries         = {{in}{in}},
+  ofseries         = {{of}{of}},
+  number           = {{nömrə}{№}},
+  chapter          = {{fəsil}{fəs\adddot}},
+  bathesis         = {{bakalavr buraxılış işi}{bakalavr buraxılış işi}},
+  mathesis         = {{magistrlik dissertasiyası}{magistrlik dissertasiyası}},
+  phdthesis        = {{fəlsəfə doktoru dissertasiyası}{fəlsəfə doktoru dissertasiyası}},
+  candthesis       = {{namizədlik dissertasiyası}{namizədlik dissertasiyası}},
+  resreport        = {{tədqiqat hesabatı}{tədq\adddotspace hes\adddot}},
+  techreport       = {{texniki hesabat}{tex\adddotspace hes\adddot}},
+  software         = {{kompüterin proqram təminatı}{komp\adddotspace proq\adddotspace təmin\adddot}},
+  datacd           = {{CD-ROM}{CD-ROM}},
+  audiocd          = {{audio CD}{audio CD}},
+  version          = {{versiya}{vers\adddot}},
+  url              = {{URL}{URL}},
+  urlfrom          = {{available from}{available from}},
+  urlseen          = {{müraciət tarixi}{müraciət tarixi}},
+  inpreparation    = {{nəşrə hazırlanır}{nəşrə hazırlanır}},
+  submitted        = {{çapa təqdim edilib}{çapa təqdim edilib}},
+  forthcoming      = {{çapa qəbul edilib}{çapa qəbul edilib}},
+  inpress          = {{çapdadır}{çapdadır}},
+  prepublished     = {{pre-published}{pre-published}},
+  citedas          = {{bundan sonra}{bundan sonra}},
+  thiscite         = {{xüsusilə}{xüs\adddot}},
+  seenote          = {{qeydə bax}{qeydə bax}},
+  quotedin         = {{quoted in}{qtd\adddotspace in}},
+  idem             = {{idem}{idem}},
+  idemsm           = {{idem}{idem}},
+  idemsf           = {{eadem}{eadem}},
+  idemsn           = {{idem}{idem}},
+  idempm           = {{eidem}{eidem}},
+  idempf           = {{eaedem}{eaedem}},
+  idempn           = {{eadem}{eadem}},
+  idempp           = {{eidem}{eidem}},
+  ibidem           = {{ibidem}{ibid\adddot}},
+  opcit            = {{op\adddotspace cit\adddot}{op\adddotspace cit\adddot}},
+  loccit           = {{loc\adddotspace cit\adddot}{loc\adddotspace cit\adddot}},
+  confer           = {{cf\adddot}{cf\adddot}},
+  sequens          = {{sq\adddot}{sq\adddot}},
+  sequentes        = {{sqq\adddot}{sqq\adddot}},
+  passim           = {{passim}{pass\adddot}},
+  see              = {{bax}{bax}},
+  seealso          = {{həmçinin bax}{həmçinin bax}},
+  backrefpage      = {{cited on page}{cit\adddotspace on p\adddot}},
+  backrefpages     = {{cited on pages}{cit\adddotspace on pp\adddot}},
+  january          = {{yanvar}{yan\adddot}},
+  february         = {{fevral}{fev\adddot}},
+  march            = {{mart}{mar\adddot}},
+  april            = {{aprel}{apr\adddot}},
+  may              = {{may}{may}},
+  june             = {{iyun}{iyn\adddot}},
+  july             = {{iyul}{iyl\adddot}},
+  august           = {{avqust}{avq\adddot}},
+  september        = {{sentyabr}{sen\adddot}},
+  october          = {{oktyabr}{okt\adddot}},
+  november         = {{noyabr}{noy\adddot}},
+  december         = {{dekabr}{dek\adddot}},
+  langamerican     = {{Amerikanca}{Amerikanca}},
+  langazerbaijani  = {{Azərbaycanca}{Azərbaycanca}},
+  langbasque       = {{Baskca}{Baskca}},
+  langbrazilian    = {{Braziliya portuqalcası}{Braziliya portuqalcası}},
+  langbulgarian    = {{Bolqarca}{Bolqarca}},
+  langcatalan      = {{Katalanca}{Katalanca}},
+  langcroatian     = {{Xorvatca}{Xorvatca}},
+  langczech        = {{Çexcə}{Çexcə}},
+  langdanish       = {{danimarka dili}{danimarka dili}},
+  langdutch        = {{Hollandca}{Hollandca}},
+  langenglish      = {{İngiliscə}{İngiliscə}},
+  langestonian     = {{Estonca}{Estonca}},
+  langfinnish      = {{Fincə}{Fincə}},
+  langfrench       = {{Fransızca}{Fransızca}},
+  langgalician     = {{qalisiya dili}{qalisiya dili}},
+  langgerman       = {{Almanca}{Almanca}},
+  langgreek        = {{Yunanca}{Yunanca}},
+  langhungarian    = {{Macarca}{Macarca}},
+  langitalian      = {{İtalyanca}{İtalyanca}},
+  langjapanese     = {{Yaponca}{Yaponca}},
+  langlatin        = {{Latınca}{Latınca}},
+  langlatvian      = {{Latışca}{Latışca}},
+  langlithuanian   = {{Litvaca}{Litvaca}},
+  langmarathi      = {{Marathicə}{Marathicə}},
+  langnorwegian    = {{norveç dili}{norveç dili}},
+  langpolish       = {{Polyakca}{Polyakca}},
+  langportuguese   = {{Portuqalca}{Portuqalca}},
+  langromanian     = {{Rumınca}{Rumınca}},
+  langrussian      = {{Rusca}{Rusca}},
+  langserbian      = {{Serbcə}{Serbcə}},
+  langslovak       = {{Slovakca}{Slovakca}},
+  langslovene      = {{Slovencə}{Slovencə}},
+  langspanish      = {{İspanca}{İspanca}},
+  langswedish      = {{isveç dili}{isveç dili}},
+  langturkish      = {{Türkcə}{Türkcə}},
+  langukrainian    = {{Ukraynaca}{Ukraynaca}},
+  fromamerican     = {{Amerikancadan}{Amerikancadan}},
+  fromazerbaijani  = {{Azərbaycancadan}{Azərbaycancadan}},
+  frombasque       = {{Baskcadan}{Baskcadan}},
+  frombrazilian    = {{Braziliya portuqalcasından}{Braziliya portuqalcasından}},
+  frombulgarian    = {{Bolqarcadan}{Bolqarcadan}},
+  fromcatalan      = {{Katalancadan}{Katalancadan}},
+  fromcroatian     = {{Xorvatcadan}{Xorvatcadan}},
+  fromczech        = {{Çexcədən}{Çexcədən}},
+  fromdanish       = {{danimarka dilindən}{danimarka dilindən}},
+  fromdutch        = {{Hollandcadan}{Hollandcadan}},
+  fromenglish      = {{İngiliscədən}{İngiliscədən}},
+  fromestonian     = {{Estoncadan}{Estoncadan}},
+  fromfinnish      = {{Fincədən}{Fincədən}},
+  fromfrench       = {{Fransızcadan}{Fransızcadan}},
+  fromgalician     = {{qalisiya dilindən}{qalisiya dilindən}},
+  fromgerman       = {{Almancadan}{Almancadan}},
+  fromgreek        = {{Yunancadan}{Yunancadan}},
+  fromhungarian    = {{Macarcadan}{Macarcadan}},
+  fromitalian      = {{İtalyancadan}{İtalyancadan}},
+  fromjapanese     = {{Yaponcadan}{Yaponcadan}},
+  fromlatin        = {{Latıncadan}{Latıncadan}},
+  fromlatvian      = {{Latışcadan}{Latışcadan}},
+  fromlithuanian   = {{Litvacadan}{Litvacadan}},
+  frommarathi      = {{Marathicədən}{Marathicədən}},
+  fromnorwegian    = {{norveç dilindən}{norveç dilindən}},
+  frompolish       = {{Polyakcadan}{Polyakcadan}},
+  fromportuguese   = {{Portuqalcadan}{Portuqalcadan}},
+  fromromanian     = {{Rumıncadan}{Rumıncadan}},
+  fromrussian      = {{Ruscadan}{Ruscadan}},
+  fromserbian      = {{Serbcədən}{Serbcədən}},
+  fromslovak       = {{Slovakcadan}{Slovakcadan}},
+  fromslovene      = {{Slovencədən}{Slovencədən}},
+  fromspanish      = {{İspancadan}{İspancadan}},
+  fromswedish      = {{isveç dilindən}{isveç dilindən}},
+  fromturkish      = {{Türkcədən}{Türkcədən}},
+  fromukrainian    = {{Ukraynacadan}{Ukraynacadan}},
+  countryde        = {{Almaniya}{DE}},
+  countryeu        = {{Avropa İttifaqı}{EU}},
+  countryep        = {{Avropa İttifaqı}{EP}},
+  countryfr        = {{Fransa}{FR}},
+  countryuk        = {{Birləşmiş Krallıq}{GB}},
+  countryus        = {{Amerika Birləşmiş Ştatları}{US}},
+  patent           = {{patent}{pat\adddot}},
+  patentde         = {{Alman patenti}{Alman pat\adddot}},
+  patenteu         = {{Avropa patenti}{Avropa pat\adddot}},
+  patentfr         = {{Fransız patenti}{Fransız pat\adddot}},
+  patentuk         = {{Birləşmiş Krallıq patenti}{Birləşmiş Krallıq pat\adddot}},
+  patentus         = {{ABŞ patenti}{ABŞ pat\adddot}},
+  patreq           = {{patent ərizəsi}{patent ərizəsi}},
+  patreqde         = {{Alman patent ərizəsi}{Alman patent ərizəsi}},
+  patreqeu         = {{Avropa patent ərizəsi}{Avropa patent ərizəsi}},
+  patreqfr         = {{Fransız patent ərizəsi}{Fransız patent ərizəsi}},
+  patrequk         = {{Birləşmiş Krallıq patent ərizəsi}{Birləşmiş Krallıq patent ərizəsi}},
+  patrequs         = {{ABŞ patent ərizəsi}{ABŞ patent ərizəsi}},
+  file             = {{fayl}{fayl}},
+  library          = {{kitabxana}{kitabxana}},
+  abstract         = {{xülasə}{xülasə}},
+  annotation       = {{qeydlər}{qeydlər}},
+  commonera        = {{Bizim era}{BE}},
+  beforecommonera  = {{Bizim eradan əvvəl}{BEƏ}},
+  annodomini       = {{Miladdan sonra}{MS}},
+  beforechrist     = {{Miladdan əvvəl}{MƏ}},
+  circa            = {{circa}{ca\adddot}},
+  spring           = {{Yaz}{Yaz}},
+  summer           = {{Yay}{Yay}},
+  autumn           = {{Payız}{Payız}},
+  winter           = {{Qış}{Qış}},
+  springN          = {{Yaz (Şimal Yarımkürəsi)}{Yaz ŞY}},
+  summerN          = {{Yay (Şimal Yarımkürəsi)}{Yay ŞY}},
+  autumnN          = {{Payız (Şimal Yarımkürəsi)}{Payız ŞY}},
+  winterN          = {{Qış (Şimal Yarımkürəsi)}{Qış ŞY}},
+  springS          = {{Yaz (Cənub Yarımkürəsi)}{Yaz CY}},
+  summerS          = {{Yay (Cənub Yarımkürəsi)}{Yay CY}},
+  autumnS          = {{Payız (Cənub Yarımkürəsi)}{Payız CY}},
+  winterS          = {{Qış (Cənub Yarımkürəsi)}{Qış CY}},
+  Q1               = {{birinci rüb}{I rüb}},
+  Q2               = {{ikinci rüb}{II rüb}},
+  Q3               = {{üçüncü rüb}{III rüb}},
+  Q4               = {{dördüncü rüb}{IV rüb}},
+  QD1              = {{Quadrimester~1}{Q1}},
+  QD2              = {{Quadrimester~2}{Q2}},
+  QD3              = {{Quadrimester~3}{Q3}},
+  S1               = {{birinci semestr}{I semestr}},
+  S2               = {{ikinci semestr}{II semestr}},
+  am               = {{AM}{AM}},
+  pm               = {{PM}{PM}},
+}
+
+\endinput
