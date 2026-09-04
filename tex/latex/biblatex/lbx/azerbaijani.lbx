@@ -4,6 +4,13 @@
 \DeclareRedundantLanguages{azerbaijani}{azerbaijani}
 
 \DeclareBibliographyExtras{%
+  % Flag used by the related-entry macros below to tell whether the
+  % citing entry's own relatedstring field is undefined, queried
+  % before \entrydata* switches the field context to the related
+  % entry (see lbx@az@related:titleinject and the origpubas/origpubin
+  % overrides). \providetoggle is idempotent, so this is safe to
+  % re-run on every activation.
+  \providetoggle{lbx@az@relatedstringundef}%
   \renewrobustcmd*{\bibdatesep}{\adddot}%
   \protected\def\bibrangedash{%
     \textendash\penalty\hyphenpenalty}% breakable dash
@@ -129,6 +136,155 @@
     \mkbibyeardivision{\thefield{#2}}%
     \iffieldundef{#1}{}{\space}%
     \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+  % Azerbaijani related-entry phrasing: rather than manually
+  % reconstructing author/title/location/date (which would silently
+  % drop legitimate metadata such as editor, edition, series, volume,
+  % pagetotal, isbn, doi, url or note), reuse related:default's own
+  % \usedriver call so the *normal* bibliography driver renders the
+  % related entry in full, and inject the localised phrase only by
+  % locally overriding the "title" bibmacro for the duration of that
+  % one \usedriver call (title is the common hook used by @article
+  % directly and by @book/@inbook/@incollection via maintitle+title /
+  % maintitle+booktitle). Everything else the driver prints is
+  % untouched.
+  \savebibmacro{lbx@az@related:titleinject}%
+  \newbibmacro*{lbx@az@related:titleinject}[2]{%
+    \iffieldundef{relatedstring}
+      {\toggletrue{lbx@az@relatedstringundef}}
+      {\togglefalse{lbx@az@relatedstringundef}}%
+    \entrydata*{#1}{%
+      \usedriver
+        {\ifnameundef{savedauthor}
+           {\ifnameundef{savededitor}
+              {}
+              {\ifnamesequal{editor}{savededitor}
+                 {\clearname{editor}}
+                 {}}}
+           {\ifnamesequal{author}{savedauthor}
+              {\clearname{author}}
+              {}}%
+         \DeclareNameAlias{sortname}{default}%
+         \ifbibmacroundef{bbx:dashcheck}
+           {}
+           {\renewbibmacro*{bbx:dashcheck}[2]{##2}}%
+         \ifbibmacroundef{labeltitle}
+           {}
+           {\renewbibmacro*{labeltitle}{}}%
+         \ifbibmacroundef{date+extradate}
+           {}
+           {\renewbibmacro*{date+extradate}{}%
+            \renewbibmacro*{bbx:ifmergeddate}{\@secondoftwo}}%
+         \renewbibmacro*{pageref}{}%
+         \renewbibmacro*{related:init}{}%
+         \ifbibmacroundef{title}
+           {}
+           {\letbibmacro{lbx@az@origtitle}{title}%
+            \renewbibmacro*{title}{%
+              \usebibmacro{lbx@az@origtitle}%
+              \iftoggle{lbx@az@relatedstringundef}
+                {\setunit{\space}%
+                 \printtext{\bibstring[\mkrelatedstringtext]{#2}}%
+                 \printunit{\addcomma\space}}
+                {}}}}
+        {\thefield{entrytype}}}}%
+  \savebibmacro{related:reviewof}%
+  \newbibmacro*{related:reviewof}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{reviewof}}%
+  \savebibmacro{related:translationof}%
+  \newbibmacro*{related:translationof}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{translationof}}%
+  \savebibmacro{related:reprintof}%
+  \newbibmacro*{related:reprintof}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{reprintof}}%
+  \savebibmacro{related:translationas}%
+  \newbibmacro*{related:translationas}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{translationas}}%
+  \savebibmacro{related:reprintas}%
+  \newbibmacro*{related:reprintas}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{reprintas}}%
+  \savebibmacro{related:origpubas}%
+  \renewbibmacro*{related:origpubas}[1]{%
+    \iffieldundef{relatedstring}
+      {\toggletrue{lbx@az@relatedstringundef}}
+      {\togglefalse{lbx@az@relatedstringundef}}%
+    \entrydata*{#1}{%
+      \usebibmacro{title}%
+      \iftoggle{lbx@az@relatedstringundef}
+        {\setunit{\space}%
+         \printtext{başlıqlı}%
+         \ifboolexpr{
+           test {\iflistsequal{publisher}{savedpublisher}}
+           or
+           test {\iflistundef{publisher}}
+         }
+           {}
+           {\setunit{\space}%
+            \printtext{\printlist{publisher}}%
+            \setunit{\space}%
+            \printtext{tərəfindən}}%
+         \setunit{\space}%
+         \printtext{\bibstring[\mkrelatedstringtext]{origpubas}}%
+         \ifboolexpr{
+           test {\iflistsequal{publisher}{savedpublisher}}
+           or
+           test {\iflistundef{publisher}}
+         }
+           {}
+           {\setunit{\addcomma\space}%
+            \iflistsequal{location}{savedlocation}
+              {}
+              {\printlist{location}}}}
+        {}}}%
+  \savebibmacro{related:origpubin}%
+  \renewbibmacro*{related:origpubin}[1]{%
+    \iffieldundef{relatedstring}
+      {\toggletrue{lbx@az@relatedstringundef}}
+      {\togglefalse{lbx@az@relatedstringundef}}%
+    \entrydata*{#1}{%
+      \edef\lbx@az@relyear{\strfield{year}}%
+      \expandafter\mkbibordinal\expandafter{\lbx@az@relyear}%
+      \space ildə%
+      \iflistundef{publisher}
+        {}
+        {\space\printlist{publisher}\space tərəfindən}%
+      \iftoggle{lbx@az@relatedstringundef}
+        {\setunit{\space}%
+         \printtext{\bibstring[\mkrelatedstringtext]{origpubin}}}
+        {}%
+      \setunit{\addcomma\space}%
+      \printlist{location}}}%
+  \savefieldformat{relatedstring:reviewof}%
+  \DeclareFieldFormat{relatedstring:reviewof}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:translationof}%
+  \DeclareFieldFormat{relatedstring:translationof}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:reprintof}%
+  \DeclareFieldFormat{relatedstring:reprintof}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:translationas}%
+  \DeclareFieldFormat{relatedstring:translationas}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:reprintas}%
+  \DeclareFieldFormat{relatedstring:reprintas}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:origpubas}%
+  \DeclareFieldFormat{relatedstring:origpubas}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:origpubin}%
+  \DeclareFieldFormat{relatedstring:origpubin}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+}
+
+\UndeclareBibliographyExtras{%
+  \restorebibmacro{lbx@az@related:titleinject}%
+  \restorebibmacro{related:reviewof}%
+  \restorebibmacro{related:translationof}%
+  \restorebibmacro{related:reprintof}%
+  \restorebibmacro{related:translationas}%
+  \restorebibmacro{related:reprintas}%
+  \restorebibmacro{related:origpubas}%
+  \restorebibmacro{related:origpubin}%
+  \restorefieldformat{relatedstring:reviewof}%
+  \restorefieldformat{relatedstring:translationof}%
+  \restorefieldformat{relatedstring:reprintof}%
+  \restorefieldformat{relatedstring:translationas}%
+  \restorefieldformat{relatedstring:reprintas}%
+  \restorefieldformat{relatedstring:origpubas}%
+  \restorefieldformat{relatedstring:origpubin}%
 }
 
 \DeclareBibliographyStrings{%
@@ -399,15 +555,15 @@
   oldseries        = {{köhnə seriya}{köhnə ser\adddot}},
   edition          = {{nəşr}{nəşr}},
   reprint          = {{təkrar nəşr}{təkrar nəşr}},
-  reprintof        = {{reprint of}{repr\adddotspace of}},
-  reprintas        = {{reprinted as}{rpt\adddotspace as}},
+  reprintof        = {{əsərinin təkrar nəşri}{əsərinin təkrar nəşri}},
+  reprintas        = {{başlıqlı təkrar nəşr}{başlıqlı təkrar nəşr}},
   reprintfrom      = {{reprinted from}{repr\adddotspace from}},
-  reviewof         = {{review of}{rev\adddotspace of}},
-  translationof    = {{translation of}{trans\adddotspace of}},
-  translationas    = {{translated as}{trans\adddotspace as}},
+  reviewof         = {{əsəri haqqında rəy}{əsəri haqqında rəy}},
+  translationof    = {{əsərinin tərcüməsi}{əsərinin tərcüməsi}},
+  translationas    = {{başlıqlı tərcümə}{başlıqlı tərcümə}},
   translationfrom  = {{translated from}{trans\adddotspace from}},
-  origpubas        = {{originally published as}{orig\adddotspace pub\adddotspace as}},
-  origpubin        = {{originally published in}{orig\adddotspace pub\adddotspace in}},
+  origpubas        = {{ilk nəşr}{ilk nəşr}},
+  origpubin        = {{ilk nəşr}{ilk nəşr}},
   astitle          = {{as}{as}},
   bypublisher      = {{nəşr edən}{nəşr edən}},
   nodate           = {{tarix yoxdur}{t\adddot y\adddot}},
