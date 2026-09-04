@@ -253,6 +253,61 @@
         {}%
       \setunit{\addcomma\space}%
       \printlist{location}}}%
+  \savebibmacro{related:translationfrom}%
+  \newbibmacro*{related:translationfrom}[1]{%
+    \usebibmacro{lbx@az@related:titleinject}{#1}{translationfrom}}%
+  % reprintfrom has its own dedicated related:reprintfrom macro that
+  % never calls \usedriver or the "title" bibmacro (it renders the
+  % containing anthology/journal issue, not a full related-entry
+  % citation), so lbx@az@related:titleinject does not apply here. This
+  % is upstream's related:reprintfrom (biblatex.def) with the phrase
+  % inserted immediately after the container title in each of the two
+  % existing branches (book/anthology; journal), before the remaining
+  % container metadata. Everything else is untouched.
+  \savebibmacro{related:reprintfrom}%
+  \renewbibmacro*{related:reprintfrom}[1]{%
+    \iffieldundef{relatedstring}
+      {\toggletrue{lbx@az@relatedstringundef}}
+      {\togglefalse{lbx@az@relatedstringundef}}%
+    \entrydata*{#1}{%
+      \iffieldundef{journaltitle}
+        {\iffieldundef{maintitle}
+           {\printfield[title:hook]{booktitle}}
+           {\printfield[title:hook]{maintitle}}%
+         \iftoggle{lbx@az@relatedstringundef}
+           {\setunit{\space}%
+            \printtext{\bibstring[\mkrelatedstringtext]{reprintfrom}}%
+            \printunit{\addcomma\space}}
+           {}%
+         \newunit\newblock
+         \usebibmacro{byeditor+others}%
+         \newunit\newblock
+         \printfield{edition}%
+         \newunit
+         \iffieldundef{volume}
+           {}
+           {\printfield{volume}%
+            \printfield{part}}
+         \newunit\newblock
+         \usebibmacro{series+number}%
+         \newunit\newblock
+         \printfield{note}%
+         \newunit\newblock
+         \usebibmacro{publisher+location+date}%
+         \newunit\newblock
+         \usebibmacro{chapter+pages}}
+        {\renewbibmacro*{journal}{%
+           \printfield[title:hook]{journaltitle}%
+           \iftoggle{lbx@az@relatedstringundef}
+             {\setunit{\space}%
+              \printtext{\bibstring[\mkrelatedstringtext]{reprintfrom}}%
+              \printunit{\addcomma\space}}
+             {}}%
+         \usebibmacro{journal+issuetitle}%
+         \newunit\newblock
+         \usebibmacro{byeditor+others}%
+         \newunit\newblock
+         \usebibmacro{note+pages}}}}%
   \savefieldformat{relatedstring:reviewof}%
   \DeclareFieldFormat{relatedstring:reviewof}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
   \savefieldformat{relatedstring:translationof}%
@@ -267,6 +322,10 @@
   \DeclareFieldFormat{relatedstring:origpubas}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
   \savefieldformat{relatedstring:origpubin}%
   \DeclareFieldFormat{relatedstring:origpubin}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:translationfrom}%
+  \DeclareFieldFormat{relatedstring:translationfrom}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  \savefieldformat{relatedstring:reprintfrom}%
+  \DeclareFieldFormat{relatedstring:reprintfrom}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
 }
 
 \UndeclareBibliographyExtras{%
@@ -278,6 +337,8 @@
   \restorebibmacro{related:reprintas}%
   \restorebibmacro{related:origpubas}%
   \restorebibmacro{related:origpubin}%
+  \restorebibmacro{related:translationfrom}%
+  \restorebibmacro{related:reprintfrom}%
   \restorefieldformat{relatedstring:reviewof}%
   \restorefieldformat{relatedstring:translationof}%
   \restorefieldformat{relatedstring:reprintof}%
@@ -285,6 +346,8 @@
   \restorefieldformat{relatedstring:reprintas}%
   \restorefieldformat{relatedstring:origpubas}%
   \restorefieldformat{relatedstring:origpubin}%
+  \restorefieldformat{relatedstring:translationfrom}%
+  \restorefieldformat{relatedstring:reprintfrom}%
 }
 
 \DeclareBibliographyStrings{%
@@ -557,11 +620,11 @@
   reprint          = {{təkrar nəşr}{təkrar nəşr}},
   reprintof        = {{əsərinin təkrar nəşri}{əsərinin təkrar nəşri}},
   reprintas        = {{başlıqlı təkrar nəşr}{başlıqlı təkrar nəşr}},
-  reprintfrom      = {{reprinted from}{repr\adddotspace from}},
+  reprintfrom      = {{nəşrindən təkrar çap}{nəşrindən təkrar çap}},
   reviewof         = {{əsəri haqqında rəy}{əsəri haqqında rəy}},
   translationof    = {{əsərinin tərcüməsi}{əsərinin tərcüməsi}},
   translationas    = {{başlıqlı tərcümə}{başlıqlı tərcümə}},
-  translationfrom  = {{translated from}{trans\adddotspace from}},
+  translationfrom  = {{əsərindən tərcümə}{əsərindən tərcümə}},
   origpubas        = {{ilk nəşr}{ilk nəşr}},
   origpubin        = {{ilk nəşr}{ilk nəşr}},
   astitle          = {{as}{as}},
