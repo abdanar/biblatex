@@ -334,11 +334,11 @@
   % against "savedoriglanguage" instead of "origlanguage" gives the
   % correctly-inflected, long/short-aware "from LANGUAGE" phrase
   % without reimplementing any vowel-harmony or language-name logic.
-  % Those "from*" strings are declared with a capitalised first letter
-  % (for their normal sentence-initial use in the global "bytranslator"
-  % string); \MakeLowercase corrects that for this mid-sentence slot,
-  % matching Azerbaijani's dotted/dotless-i rules via the same
-  % \DeclareBabelToExplLanguageMapping fix already in place.
+  % The "from*"/"lang*" strings are stored in lowercase base form and
+  % printed as-is here (mid-sentence slot); biblatex's own bibstring
+  % capitalization machinery still uppercases them correctly wherever
+  % they are used sentence-initially elsewhere (e.g. the global
+  % "bytranslator" string).
   \savefieldformat{relatedstring:bytranslator}%
   \DeclareFieldFormat{relatedstring:bytranslator}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
   \savebibmacro{related:bytranslator}%
@@ -364,18 +364,15 @@
            \iflistundef{savedoriglanguage}
              {}
              {% Resolve the original language before entering the related entry.
-              % We cannot lowercase \printlist[lfromoriglanguage] directly since
-              % the list-format grouping prevents the case-change machinery from
-              % reaching the underlying bibstring.
               \edef\lbx@az@origlang{\strfirstlistitem{savedoriglanguage}}%
               \edef\lbx@az@fromphrase{\bibstring{from\lbx@az@origlang}}%
               \edef\lbx@az@langphrase{\bibstring{lang\lbx@az@origlang}}%
               % Resolve the bibstring key before testing it since \ifbibstring
               % does not expand a macro used as part of the key.
               \ifcsdef{abx@lstr@from\lbx@az@origlang}
-                {\MakeLowercase{\lbx@az@fromphrase}}
+                {\lbx@az@fromphrase}
                 {\ifcsdef{abx@lstr@lang\lbx@az@origlang}
-                   {\MakeLowercase{\lbx@az@langphrase}}
+                   {\lbx@az@langphrase}
                    {\lbx@az@origlang}}%
               \space}%
            tərcümə}}
@@ -797,77 +794,77 @@
   november         = {{noyabr}{noy\adddot}},
   december         = {{dekabr}{dek\adddot}},
   langamerican     = {{Amerika ingiliscəsi}{Amerika ingiliscəsi}},
-  langazerbaijani  = {{Azərbaycanca}{Azərbaycanca}},
-  langbasque       = {{Baskca}{Baskca}},
+  langazerbaijani  = {{azərbaycanca}{azərbaycanca}},
+  langbasque       = {{baskca}{baskca}},
   langbrazilian    = {{Braziliya portuqalcası}{Braziliya portuqalcası}},
-  langbulgarian    = {{Bolqarca}{Bolqarca}},
-  langcatalan      = {{Katalanca}{Katalanca}},
-  langcroatian     = {{Xorvatca}{Xorvatca}},
-  langczech        = {{Çexcə}{Çexcə}},
+  langbulgarian    = {{bolqarca}{bolqarca}},
+  langcatalan      = {{katalanca}{katalanca}},
+  langcroatian     = {{xorvatca}{xorvatca}},
+  langczech        = {{çexcə}{çexcə}},
   langdanish       = {{danimarka dili}{danimarka dili}},
   langdutch        = {{Niderland dili}{Niderland dili}},
-  langenglish      = {{İngiliscə}{İngiliscə}},
-  langestonian     = {{Estonca}{Estonca}},
-  langfinnish      = {{Fincə}{Fincə}},
-  langfrench       = {{Fransızca}{Fransızca}},
+  langenglish      = {{ingiliscə}{ingiliscə}},
+  langestonian     = {{estonca}{estonca}},
+  langfinnish      = {{fincə}{fincə}},
+  langfrench       = {{fransızca}{fransızca}},
   langgalician     = {{qalisiya dili}{qalisiya dili}},
-  langgerman       = {{Almanca}{Almanca}},
-  langgreek        = {{Yunanca}{Yunanca}},
-  langhungarian    = {{Macarca}{Macarca}},
-  langitalian      = {{İtalyanca}{İtalyanca}},
-  langjapanese     = {{Yaponca}{Yaponca}},
-  langlatin        = {{Latınca}{Latınca}},
-  langlatvian      = {{Latışca}{Latışca}},
-  langlithuanian   = {{Litvaca}{Litvaca}},
-  langmarathi      = {{Marathicə}{Marathicə}},
+  langgerman       = {{almanca}{almanca}},
+  langgreek        = {{yunanca}{yunanca}},
+  langhungarian    = {{macarca}{macarca}},
+  langitalian      = {{italyanca}{italyanca}},
+  langjapanese     = {{yaponca}{yaponca}},
+  langlatin        = {{latınca}{latınca}},
+  langlatvian      = {{latışca}{latışca}},
+  langlithuanian   = {{litvaca}{litvaca}},
+  langmarathi      = {{marathicə}{marathicə}},
   langnorwegian    = {{norveç dili}{norveç dili}},
-  langpolish       = {{Polyakca}{Polyakca}},
-  langportuguese   = {{Portuqalca}{Portuqalca}},
-  langromanian     = {{Rumınca}{Rumınca}},
-  langrussian      = {{Rusca}{Rusca}},
-  langserbian      = {{Serbcə}{Serbcə}},
-  langslovak       = {{Slovakca}{Slovakca}},
-  langslovene      = {{Slovencə}{Slovencə}},
-  langspanish      = {{İspanca}{İspanca}},
+  langpolish       = {{polyakca}{polyakca}},
+  langportuguese   = {{portuqalca}{portuqalca}},
+  langromanian     = {{rumınca}{rumınca}},
+  langrussian      = {{rusca}{rusca}},
+  langserbian      = {{serbcə}{serbcə}},
+  langslovak       = {{slovakca}{slovakca}},
+  langslovene      = {{slovencə}{slovencə}},
+  langspanish      = {{ispanca}{ispanca}},
   langswedish      = {{isveç dili}{isveç dili}},
-  langturkish      = {{Türkcə}{Türkcə}},
-  langukrainian    = {{Ukraynaca}{Ukraynaca}},
+  langturkish      = {{türkcə}{türkcə}},
+  langukrainian    = {{ukraynaca}{ukraynaca}},
   fromamerican     = {{Amerika ingiliscəsindən}{Amerika ingiliscəsindən}},
-  fromazerbaijani  = {{Azərbaycancadan}{Azərbaycancadan}},
-  frombasque       = {{Baskcadan}{Baskcadan}},
+  fromazerbaijani  = {{azərbaycancadan}{azərbaycancadan}},
+  frombasque       = {{baskcadan}{baskcadan}},
   frombrazilian    = {{Braziliya portuqalcasından}{Braziliya portuqalcasından}},
-  frombulgarian    = {{Bolqarcadan}{Bolqarcadan}},
-  fromcatalan      = {{Katalancadan}{Katalancadan}},
-  fromcroatian     = {{Xorvatcadan}{Xorvatcadan}},
-  fromczech        = {{Çexcədən}{Çexcədən}},
+  frombulgarian    = {{bolqarcadan}{bolqarcadan}},
+  fromcatalan      = {{katalancadan}{katalancadan}},
+  fromcroatian     = {{xorvatcadan}{xorvatcadan}},
+  fromczech        = {{çexcədən}{çexcədən}},
   fromdanish       = {{danimarka dilindən}{danimarka dilindən}},
   fromdutch        = {{Niderland dilindən}{Niderland dilindən}},
-  fromenglish      = {{İngiliscədən}{İngiliscədən}},
-  fromestonian     = {{Estoncadan}{Estoncadan}},
-  fromfinnish      = {{Fincədən}{Fincədən}},
-  fromfrench       = {{Fransızcadan}{Fransızcadan}},
+  fromenglish      = {{ingiliscədən}{ingiliscədən}},
+  fromestonian     = {{estoncadan}{estoncadan}},
+  fromfinnish      = {{fincədən}{fincədən}},
+  fromfrench       = {{fransızcadan}{fransızcadan}},
   fromgalician     = {{qalisiya dilindən}{qalisiya dilindən}},
-  fromgerman       = {{Almancadan}{Almancadan}},
-  fromgreek        = {{Yunancadan}{Yunancadan}},
-  fromhungarian    = {{Macarcadan}{Macarcadan}},
-  fromitalian      = {{İtalyancadan}{İtalyancadan}},
-  fromjapanese     = {{Yaponcadan}{Yaponcadan}},
-  fromlatin        = {{Latıncadan}{Latıncadan}},
-  fromlatvian      = {{Latışcadan}{Latışcadan}},
-  fromlithuanian   = {{Litvacadan}{Litvacadan}},
-  frommarathi      = {{Marathicədən}{Marathicədən}},
+  fromgerman       = {{almancadan}{almancadan}},
+  fromgreek        = {{yunancadan}{yunancadan}},
+  fromhungarian    = {{macarcadan}{macarcadan}},
+  fromitalian      = {{italyancadan}{italyancadan}},
+  fromjapanese     = {{yaponcadan}{yaponcadan}},
+  fromlatin        = {{latıncadan}{latıncadan}},
+  fromlatvian      = {{latışcadan}{latışcadan}},
+  fromlithuanian   = {{litvacadan}{litvacadan}},
+  frommarathi      = {{marathicədən}{marathicədən}},
   fromnorwegian    = {{norveç dilindən}{norveç dilindən}},
-  frompolish       = {{Polyakcadan}{Polyakcadan}},
-  fromportuguese   = {{Portuqalcadan}{Portuqalcadan}},
-  fromromanian     = {{Rumıncadan}{Rumıncadan}},
-  fromrussian      = {{Ruscadan}{Ruscadan}},
-  fromserbian      = {{Serbcədən}{Serbcədən}},
-  fromslovak       = {{Slovakcadan}{Slovakcadan}},
-  fromslovene      = {{Slovencədən}{Slovencədən}},
-  fromspanish      = {{İspancadan}{İspancadan}},
+  frompolish       = {{polyakcadan}{polyakcadan}},
+  fromportuguese   = {{portuqalcadan}{portuqalcadan}},
+  fromromanian     = {{rumıncadan}{rumıncadan}},
+  fromrussian      = {{ruscadan}{ruscadan}},
+  fromserbian      = {{serbcədən}{serbcədən}},
+  fromslovak       = {{slovakcadan}{slovakcadan}},
+  fromslovene      = {{slovencədən}{slovencədən}},
+  fromspanish      = {{ispancadan}{ispancadan}},
   fromswedish      = {{isveç dilindən}{isveç dilindən}},
-  fromturkish      = {{Türkcədən}{Türkcədən}},
-  fromukrainian    = {{Ukraynacadan}{Ukraynacadan}},
+  fromturkish      = {{türkcədən}{türkcədən}},
+  fromukrainian    = {{ukraynacadan}{ukraynacadan}},
   countryde        = {{Almaniya}{DE}},
   countryeu        = {{Avropa İttifaqı}{EU}},
   countryep        = {{Avropa İttifaqı}{EP}},
