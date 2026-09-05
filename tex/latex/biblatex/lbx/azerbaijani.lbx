@@ -404,6 +404,24 @@
   \DeclareFieldFormat{relatedstring:translationfrom}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
   \savefieldformat{relatedstring:reprintfrom}%
   \DeclareFieldFormat{relatedstring:reprintfrom}{\iffieldundef{relatedstring}{}{#1\printunit{\relatedpunct}}}%
+  % Azerbaijani shorthand introduction: upstream's automatic branch (no
+  % explicit shorthandintro field) is just "citedas SHORTHAND", e.g.
+  % "(henceforth cited as KrV)". The natural Azerbaijani reading needs a
+  % trailing "kimi istinad edilir" after the shorthand, so only that one
+  % branch is rebuilt here; the explicit-shorthandintro branch (a fully
+  % user-supplied string) is copied through unchanged.
+  \savebibmacro{shorthandintro}%
+  \renewbibmacro*{shorthandintro}{%
+    \iffieldundef{shorthandintro}
+      {\iffieldundef{shorthand}
+         {}
+         {\setunit{\addspace}%
+          \printtext[parens]{%
+            \bibstring{citedas}\space
+            \printfield{shorthand}\space
+            kimi istinad edilir}}}
+      {\setunit{\addspace}%
+       \printtext[parens]{\printfield{shorthandintro}}}}%
 }
 
 \UndeclareBibliographyExtras{%
@@ -428,6 +446,7 @@
   \restorefieldformat{relatedstring:translationfrom}%
   \restorefieldformat{relatedstring:reprintfrom}%
   \restorefieldformat{relatedstring:bytranslator}%
+  \restorebibmacro{shorthandintro}%
 }
 
 \DeclareBibliographyStrings{%
@@ -684,8 +703,8 @@
   bytranslatoranaf = {{son sözlə birlikdə \lbx@lfromlang\ tərcümə edən və annotasiyanı yazan}%
                       {son sözlə birlikdə \lbx@sfromlang\ tərc\adddot\ edən və annotasiyanı yazan}},
   and              = {{və}{və}},
-  andothers        = {{və başqaları}{və başq\adddot}},
-  andmore          = {{və başqaları}{və başq\adddot}},
+  andothers        = {{və başqaları}{və b\adddot}},
+  andmore          = {{və başqaları}{və b\adddot}},
   volume           = {{cild}{c\adddot}},
   volumes          = {{cild}{c\adddot}},
   involumes        = {{}{}},
@@ -751,7 +770,8 @@
   version          = {{versiya}{vers\adddot}},
   url              = {{ünvan}{ünvan}},
   urlfrom          = {{}{}},
-  urlseen          = {{müraciət tarixi}{müraciət tarixi}},
+  urlseen          = {{baxılma tarixi\addcolon}
+                      {baxılma tarixi\addcolon}},
   inpreparation    = {{nəşrə hazırlanır}{nəşrə hazırlanır}},
   submitted        = {{çapa təqdim edilib}{çapa təqdim edilib}},
   forthcoming      = {{çapa qəbul edilib}{çapa qəbul edilib}},
@@ -759,7 +779,8 @@
   prepublished     = {{ön çap}{ön çap}},
   citedas          = {{bundan sonra}{bundan sonra}},
   thiscite         = {{xüsusilə}{xüs\adddot}},
-  seenote          = {{qeydə bax}{qeydə bax}},
+  seenote          = {{bax\addcolon\space qeyd}
+                      {bax\addcolon\space qeyd}},
   quotedin         = {{sitat gətirildiyi mənbə\addcolon}
                       {sitat gətirildiyi mənbə\addcolon}},
   idem             = {{idem}{idem}},
